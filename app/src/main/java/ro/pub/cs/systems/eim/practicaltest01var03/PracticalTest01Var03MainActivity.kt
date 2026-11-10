@@ -1,10 +1,12 @@
 package ro.pub.cs.systems.eim.practicaltest01var03
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -68,6 +70,18 @@ class PracticalTest01Var03MainActivity : AppCompatActivity() {
             }
 
         }
+
+        val buttonNavigateToSecondaryActivity = findViewById<Button>(R.id.buttonNavigateToSecondaryActivity)
+
+        buttonNavigateToSecondaryActivity.setOnClickListener {
+            intent = Intent(this, PracticalTest01Var03SecondaryActivity::class.java)
+            intent.putExtra("textResult", textResult.text.toString())
+
+            startActivityForResult(intent, 1)
+
+        }
+
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -82,5 +96,17 @@ class PracticalTest01Var03MainActivity : AppCompatActivity() {
         editText1.setText(savedInstanceState.getString("editText1"))
         editText2.setText(savedInstanceState.getString("editText2"))
         textResult.setText(savedInstanceState.getString("textResult"))
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Result from secondary activity: OK", Toast.LENGTH_LONG).show()
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Result from secondary activity: CANCELED", Toast.LENGTH_LONG).show()
+            }
+        }
+
     }
 }
